@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./yazilimots
+    ports:
+      - "8080:8080"
+    networks:
+      - yazilimotsfinal_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/yazilim_ots
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_SHOW_SQL: true
+      SPRING_JPA_PROPERTIES_JAVAX_PERSISTENCE_VALIDATION_MODE: none
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+      ALLOWED_IPS: 0:0:0:0:0:0:0:1
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./otsFronted
+    ports:
+      - "3000:3000"
+    networks:
+      - yazilimotsfinal_network
+    depends_on:
+      - backend  
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: yazilim_ots
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
+    ports:
+      - "3306:3306"
+    networks:
+      - yazilimotsfinal_network
+
+networks:
+  yazilimotsfinal_network:
