@@ -26,25 +26,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     // İzin verilen IP adreslerini tutan bir liste
-    private final List<String> allowedIps = Arrays.asList("0:0:0:0:0:0:0:1");
+    //private final List<String> allowedIps = Arrays.asList("0:0:0:0:0:0:0:1", "212.156.81.70");
 
     // İstekin kaynak IP adresini kontrol eden fonksiyon
+
+    /*
     private boolean isAllowedIp(HttpServletRequest request) {
         String clientIp = request.getRemoteAddr();
         return allowedIps.contains(clientIp);
     }
-
+*/
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+
+
+
         // İstekin kaynak IP adresini kontrol et
-        if (!isAllowedIp(request)) {
+        /*if (!isAllowedIp(request)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bu IP adresi için erişim reddedildi");
             return;
-        }
+        }*/
+
+
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;

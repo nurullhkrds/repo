@@ -4,10 +4,7 @@ function UserProfile() {
 
   return (
     <div>
-        <section>
-            MyProfile
-        </section>
-
+      
         <section>
             <ChangePassword/>
         </section>

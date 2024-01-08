@@ -1,25 +1,36 @@
-version: '3'
-
+version: "3.7"
 services:
   backend:
-    build:
+    build: 
       context: ./yazilimots
+    restart: always
     ports:
       - "8080:8080"
     networks:
-      - yazilimotsfinal_network
+      - springapimysql-net
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/yazilim_ots
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD:
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_HIBERNATE_SHOW_SQL: true
-      SPRING_JPA_PROPERTIES_JAVAX_PERSISTENCE_VALIDATION_MODE: none
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
-      ALLOWED_IPS: 0:0:0:0:0:0:0:1
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/yazilim_ots?allowPublicKeyRetrieval=true
+      - spring.datasource.username=root
+      - spring.datasource.password=224224
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.jpa.hibernate.show-sql=true
+      - spring.jpa.properties.javax.persistence.validation.mode=none
     depends_on:
-      - mysql
+      - mysqldb
+    volumes:
+      - .m2:/root/.m2
+
+  mysqldb:
+    image: "mysql:5.6"
+    restart: always
+    ports:
+      - "3306:3306"
+    networks:
+      - springapimysql-net  
+    environment:
+      MYSQL_DATABASE: yazilim_ots
+      MYSQL_ROOT_PASSWORD: 224224
 
   frontend:
     build:
@@ -29,18 +40,8 @@ services:
     networks:
       - yazilimotsfinal_network
     depends_on:
-      - backend  
-
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_DATABASE: yazilim_ots
-      MYSQL_USER: root
-      MYSQL_PASSWORD:
-    ports:
-      - "3306:3306"
-    networks:
-      - yazilimotsfinal_network
+      - backend
 
 networks:
+  springapimysql-net:
   yazilimotsfinal_network:
